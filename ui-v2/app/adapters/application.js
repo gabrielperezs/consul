@@ -91,6 +91,9 @@ export default Adapter.extend({
     if (typeof query.separator !== 'undefined') {
       delete query.separator;
     }
+    if (typeof query.index !== 'undefined') {
+      delete query.index;
+    }
     delete _query[DATACENTER_QUERY_PARAM];
     return query;
   },
