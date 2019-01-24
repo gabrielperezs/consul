@@ -54,6 +54,17 @@ func (c *CheckDefinition) HealthCheck(node string) *HealthCheck {
 	if health.CheckID == "" && health.Name != "" {
 		health.CheckID = types.CheckID(health.Name)
 	}
+
+	health.Definition = HealthCheckDefinition{
+		HTTP:                           c.HTTP,
+		TLSSkipVerify:                  c.TLSSkipVerify,
+		Header:                         c.Header,
+		Method:                         c.Method,
+		TCP:                            c.TCP,
+		Interval:                       c.Interval,
+		Timeout:                        c.Timeout,
+		DeregisterCriticalServiceAfter: c.DeregisterCriticalServiceAfter,
+	}
 	return health
 }
 

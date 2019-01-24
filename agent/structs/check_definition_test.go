@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/google/gofuzz"
 	"github.com/hashicorp/consul/api"
 	"github.com/mitchellh/reflectwalk"
@@ -112,4 +114,36 @@ func TestCheckDefinitionToCheckType(t *testing.T) {
 		DeregisterCriticalServiceAfter: 4 * time.Second,
 	}
 	verify.Values(t, "", got.CheckType(), want)
+}
+
+func TestCheckDefinition_HealthCheck(t *testing.T) {
+	c := &CheckDefinition{
+		ID:                             "check ID",
+		Name:                           "check name",
+		Notes:                          "check notes",
+		ServiceID:                      "check serviceid",
+		Interval:                       time.Minute * 2,
+		Timeout:                        time.Minute * 3,
+		DeregisterCriticalServiceAfter: time.Minute * 4,
+		Status:                         api.HealthWarning,
+	}
+
+	node := "node1"
+	h := c.HealthCheck(node)
+
+	require.Equal(t, c.Name, h.Name)
+	require.Equal(t, c.ID, h.CheckID)
+	require.Equal(t, node, h.Node)
+	require.Equal(t, c.Status, h.Status)
+	require.Equal(t, c.Notes, h.Notes)
+	require.Equal(t, c.ServiceID, h.ServiceID)
+
+	require.Equal(t, c.HTTP, h.Definition.HTTP)
+	require.Equal(t, c.TLSSkipVerify, h.Definition.TLSSkipVerify)
+	require.Equal(t, c.Header, h.Definition.Header)
+	require.Equal(t, c.Method, h.Definition.Method)
+	require.Equal(t, c.TCP, h.Definition.TCP)
+	require.Equal(t, c.Interval, h.Definition.Interval)
+	require.Equal(t, c.Timeout, h.Definition.Timeout)
+	require.Equal(t, c.DeregisterCriticalServiceAfter, h.Definition.DeregisterCriticalServiceAfter)
 }
