@@ -126,6 +126,11 @@ func TestCheckDefinition_HealthCheck(t *testing.T) {
 		Timeout:                        time.Minute * 3,
 		DeregisterCriticalServiceAfter: time.Minute * 4,
 		Status:                         api.HealthWarning,
+		HTTP:                           "http",
+		TLSSkipVerify:                  true,
+		Header:                         map[string][]string{"A": []string{"test"}},
+		Method:                         "PUT",
+		TCP:                            "TCP",
 	}
 
 	node := "node1"
