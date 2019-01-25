@@ -37,8 +37,8 @@ func TestAPI_ClientTxn(t *testing.T) {
 			CheckID: "bar",
 			Status:  "critical",
 			Definition: HealthCheckDefinition{
-				TCP:      "1.1.1.1",
-				Interval: 5 * time.Second,
+				TCP:              "1.1.1.1",
+				IntervalDuration: 5 * time.Second,
 			},
 		},
 	}
@@ -165,8 +165,9 @@ func TestAPI_ClientTxn(t *testing.T) {
 				CheckID: "bar",
 				Status:  "critical",
 				Definition: HealthCheckDefinition{
-					TCP:      "1.1.1.1",
-					Interval: 5 * time.Second,
+					TCP:              "1.1.1.1",
+					Interval:         ReadableDuration(5 * time.Second),
+					IntervalDuration: 5 * time.Second,
 				},
 				CreateIndex: ret.Results[4].Check.CreateIndex,
 				ModifyIndex: ret.Results[4].Check.CreateIndex,
